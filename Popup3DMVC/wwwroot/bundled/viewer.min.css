@@ -1,0 +1,1 @@
+﻿#view-3js{position:relative;flex-grow:1;height:100%;}#view-3js[h500]{height:500px;}#view-3js>*{position:absolute;left:0;right:0;top:0;bottom:0;}#view-3js #canvas-wrap{display:block;overflow:hidden;--viewerbg:#161616;}#view-3js #canvas-warpfield{pointer-events:none;}#view-3js #canvas-loading{background:url(../img/loaders/stl_loader.png) center no-repeat;}

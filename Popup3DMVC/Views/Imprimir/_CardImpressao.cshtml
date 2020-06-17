@@ -1,0 +1,88 @@
+﻿@model PedidoModel
+
+<div class="card text-white bg-info" id="card-pedido">
+	<div class="card-header">Sua impressão 3D</div>
+	<div class="card-body">
+		<h5 class="card-title">@Model.Upload.filename</h5>
+		<section>
+			<ul>
+				<li>
+					<label>Material</label>
+					<div>@Model.Material.nome</div>
+				</li>
+
+				<li>
+					<label>Resolução</label>
+					<div>@Model.Material.qualidade</div>
+				</li>
+
+				<li>
+					<label>Cor</label>
+					<div>@Model.cor</div>
+				</li>
+
+				<li>
+					<label>Dimensões</label>
+					<div>@Model.Upload.UIdimensao</div>
+				</li>
+
+				<li>
+					<label>Volume</label>
+					<div>@Model.Upload.UIvolume</div>
+				</li>
+			</ul>
+		</section>
+
+		<section>
+			<ul>
+				<li>
+					<label>Loja</label>
+					<div>@Model.Empresa.nome</div>
+				</li>
+
+				<li>
+					<label>Impressora</label>
+					<div>@Model.Impressora.marca<br />@Model.Impressora.modelo</div>
+				</li>
+			</ul>
+		</section>
+
+		<section>
+			<ul>
+				<li>
+					<label>Impressão</label>
+					<div>@Model.prazo_dias_impressao dias úteis</div>
+				</li>
+
+				<li>
+					<label>Envio</label>
+					<div>@Model.prazo_dias_envio dias úteis</div>
+				</li>
+
+				<li class="tempo-total">
+					<label>Tempo total</label>
+					<div>@(Model.prazo_dias_envio + Model.prazo_dias_impressao) dias úteis</div>
+				</li>
+			</ul>
+		</section>
+
+		<section>
+			<ul>
+				<li>
+					<label>Impressão</label>
+					<div>@Model.UIvalor_impressao</div>
+				</li>
+
+				<li>
+					<label>Envio</label>
+					<div>@Model.UIvalor_frete</div>
+				</li>
+
+				<li class="total">
+					<label>Valor total</label>
+					<div>@Model.UIvalor_total</div>
+				</li>
+			</ul>
+		</section>
+	</div>
+</div>

@@ -1,0 +1,90 @@
+﻿@model UICadastrarModel
+@{
+    ViewData["Title"] = "Cadastrar";
+}
+@section scripts {
+	<script>
+		$('#form-cadastrar').submit(function() {
+			var el_errors = $('#errors-ajax').hide();
+			var el_errors_ul = $('#errors-ajax ul').empty();
+
+			var params = $(this).serializeObject();
+			$.post('/Usuario/CadastrarAjaxCheck', params, function(data) {
+				if(!data.res) {
+					for(var i = 0; i < data.errors.length; i++)
+						el_errors_ul.append('<li><svg class="icon icon-exclamation-triangle text"><use xlink:href="#exclamation-triangle"></use></svg>&nbsp;&nbsp;' + data.errors[i] + '</li>');
+					el_errors.show();
+					return;
+				}
+
+				// Success
+				$('#form-cadastrar')[0].submit();
+			}).fail(function() {
+				el_errors_ul.append('<li><svg class="icon icon-exclamation-triangle text"><use xlink:href="#exclamation-triangle"></use></svg>&nbsp;&nbsp;Erro desconhecido.</li>');
+				$('#errors-ajax').show();
+			});
+
+			return false;
+		});
+
+		$('#btn-entrar').click(function() {
+			$('#pop-account').click();
+			return false;
+		});
+	</script>
+}
+@section head {
+	<style>
+		#container-cadastrar { max-width: 450px; margin: 0 auto; margin-top: 40px; }
+	</style>
+}
+
+<div class="container" id="container-cadastrar">
+	@if(ViewBag.checkout)
+	{
+		<div class="alert alert-info">
+			Crie um cadastro para prosseguir com sua compra.
+		</div>
+	}
+
+	<div class="card bg-light mb-3">
+		<div class="card-body">
+			<h5 class="card-title">Cadastrar</h5>
+			<form method="post" autocomplete="off" id="form-cadastrar">
+				<div class="form-group">
+					<label asp-for="Nome">Nome</label>
+					<input type="text" class="form-control" asp-for="Nome" />
+				</div>
+				<div class="form-group">
+					<label asp-for="Email">E-mail</label>
+					<input type="email" class="form-control" asp-for="Email" />
+				</div>
+				<div class="form-group">
+					<label asp-for="Senha">Senha</label>
+					<input type="password" class="form-control" asp-for="Senha" />
+				</div>
+				<div class="form-group">
+					<label asp-for="Senha2">Confirme a senha</label>
+					<input type="password" class="form-control" asp-for="Senha2">
+				</div>
+				<div class="form-check mb-2">
+					<input type="checkbox" class="form-check-input" asp-for="Termos">
+					<label class="form-check-label" asp-for="Termos">Li e concordo com os Termos de Uso</label>
+				</div>
+
+				<div id="errors-ajax" class="alert alert-danger hidden">
+					<ul class="list-unstyled"></ul>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Enviar</button>
+
+				@if(ViewBag.checkout)
+				{
+					<input type="hidden" name="redirect" value="/Imprimir/Checkout" />
+				}
+			</form>
+		</div>
+	</div>
+
+	Já possui cadastro? <a href="" id="btn-entrar">Entrar</a>
+</div>

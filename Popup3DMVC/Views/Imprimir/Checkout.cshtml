@@ -1,0 +1,180 @@
+﻿@model PedidoModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+@section head {
+	<link href="~/bundled/page_checkout.css" rel="stylesheet" />
+	<link href="~/bundled/pedido.css" rel="stylesheet" />
+}
+@section scripts {
+	<script src="~/lib/jquery.mask.min.js"></script>
+	<script src="~/lib/bootbox.all.min.js"></script>
+	<script src="https://assets.pagar.me/checkout/1.1.0/checkout.js"></script>
+
+	@*<script type="text/javascript" src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js"></script>*@
+
+	<script>
+		$('#ui-cep').mask('00000-000');
+
+		$('#btn-edit-cep').click(function() {
+			bootbox.setDefaults({ locale: 'pt' });
+			bootbox.prompt("Informe o novo CEP (o valor do frete será recalculado):", function(result) {
+				if(result)
+					location = '/Imprimir/CheckoutSetCEP?cep=' + result;
+			}).init(function(e) {
+				$('.bootbox-input').mask('00000-000');
+			});
+			return false;
+		});
+
+		$('#btn-pgto').click(function(e) {
+			e.preventDefault();
+
+			$('#errors-ajax').hide();
+			var el_errors_ul = $('#errors-ajax ul').empty();
+
+			$('#btn-pgto').prop('disabled', true);
+
+			var params = $('#form-checkout').serializeObject();
+			params["Checkout.CEP"] = $('#ui-cep').val();
+			params.id = @Model.Id;
+
+			$.post("/Imprimir/AjaxCheckoutPagamento", params, function(data) {
+				if(data.res)
+				{
+					//location = data.redirect;
+
+					var checkout = new PagarMeCheckout.Checkout({
+						encryption_key: 'ek_test_8ZQk5Nz99J84fDsd6oHqOtfVieUhIo',
+						success: function(data) {
+							console.log(data);
+						},
+						error: function(err) {
+							console.log(err);
+						},
+						close: function() {
+							console.log('The modal has been closed.');
+						}
+					});
+
+					data.customer = {
+						external_id: "123",
+						type: 'individual',
+						country: 'br'
+					};
+					checkout.open(data);
+				} else {
+					$('#btn-pgto').prop('disabled', false);
+					for(var i = 0; i < data.errors.length; i++)
+						el_errors_ul.append('<li><svg class="icon icon-exclamation-triangle text"><use xlink:href="#exclamation-triangle"></use></svg>&nbsp;&nbsp;' + data.errors[i] + '</li>');
+					$('#errors-ajax').show();
+				}
+			}).fail(function() {
+				el_errors_ul.append('<li><svg class="icon icon-exclamation-triangle text"><use xlink:href="#exclamation-triangle"></use></svg>&nbsp;&nbsp;Erro desconhecido.</li>');
+				$('#errors-ajax').show();
+				$('#btn-pgto').prop('disabled', false);
+			});
+		});
+
+		function PagSeguroCheckout(token) {
+			PagSeguroLightbox({
+				code: token,
+				success: function(transactionCode) {
+					console.log(transactionCode);
+				},
+				abort: function() {
+					console.log('ABOOOOOOOOOOOOOOOOOOOORT');
+				}
+			});
+		}
+	</script>
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-6">
+			<h1 class="text-info">Checkout</h1>
+
+			<form id="form-checkout" autocomplete="off">
+				<h2>Suas informações</h2>
+				<fieldset>
+					<label>Nome:</label>
+					<input asp-for="Checkout.Nome" class="form-control" />
+
+					<label>E-mail:</label>
+					<input asp-for="Checkout.Email" class="form-control" type="email" />
+				</fieldset>
+
+
+				<h2>Dados de entrega</h2>
+				<fieldset>
+					<div>
+						<label>CEP</label>
+						<div class="d-flex align-items-center">
+							<input id="ui-cep" class="form-control" asp-for="Checkout.CEP" style="max-width: 200px" disabled />
+							<button class="btn btn-secondary btn-sm ml-2" id="btn-edit-cep">
+								<svg class="icon icon-pencil"><use xlink:href="#pencil"></use></svg>
+								Editar
+							</button>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-6">
+							<label>Rua</label>
+							<input class="form-control" asp-for="Checkout.Rua" />
+						</div>
+						<div class="col-3">
+							<label>Número</label>
+							<input class="form-control" asp-for="Checkout.Número" />
+						</div>
+						<div class="col-3">
+							<label>Complemento</label>
+							<input class="form-control" asp-for="Checkout.Complemento" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-4">
+							<label>Bairro</label>
+							<input class="form-control" asp-for="Checkout.Bairro" />
+						</div>
+						<div class="col-4">
+							<label>Cidade</label>
+							<input class="form-control" asp-for="Checkout.Cidade" />
+						</div>
+						<div class="col-4">
+							<label>Estado</label>
+							<select asp-for="Checkout.UF" asp-items="Consts.ESTADOS_LIST" class="form-control"></select>
+						</div>
+					</div>
+				</fieldset>
+
+				<fieldset>
+					<h2>Pagamento</h2>
+					<div class="form-checE">
+						<input asp-for="Checkout.EULA" class="form-check-input" id="eula" />
+						<label class="form-check-label" for="eula">Li e concordo com os <a href="/Termos/Usuario">Termos de Uso</a></label>
+					</div>
+					<br /><br />
+
+					<button id="btn-pgto" class="btn btn-primary">Confirmar pedido e efetuar pagamento</button>
+				</fieldset>
+
+				<div id="errors-ajax" class="alert alert-danger hidden">
+					<ul class="list-unstyled"></ul>
+				</div>
+			</form>
+
+			@*Pagamento seguro por<br />
+			<img src="~/img/svg/pagseguro.svg" />*@
+		</div>
+
+		<div class="col-4 offset-2">
+			@Html.Partial("_CardImpressao")
+			<div class="p-3 text-center">
+				<a href="/Imprimir/Upload/@(Model.Upload.Id)"><svg class="icon icon-alternate-arrow-circle-left text"><use xlink:href="#alternate-arrow-circle-left"></use></svg> Selecionar outro Printer</a>
+			</div>
+		</div>
+	</div>
+</div>

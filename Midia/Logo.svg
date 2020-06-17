@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="191px" height="32px" viewBox="0 0 191 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Logo</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="-9.7679716e-05%" x2="50%" y2="99.9999023%" id="linearGradient-1">
+            <stop stop-color="#2AF598" offset="0%"></stop>
+            <stop stop-color="#009EFD" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-148.000000, -21.000000)">
+            <g id="Toolbar" transform="translate(0.000000, -2.000000)">
+                <g id="Logo" transform="translate(148.000000, 18.000000)">
+                    <path d="M14.7,5 L0,10.4457633 L0,28.9542941 L14.7,34.4 L29.4,28.9542941 L29.4,10.4457633 L14.7,5 Z M25.2,10.7750278 L14.7,14.45 L4.2,10.7749722 L14.7,7.1 L25.2,10.7750278 Z M2.1,13.4 L13.65,17.6300874 L13.65,32.3 L2.1,28.0699126 L2.1,13.4 Z M15.75,32.3 L15.75,17.6300744 L27.3,13.4 L27.3,28.0698674 L15.75,32.3 Z" id="Shape" fill="url(#linearGradient-1)" fill-rule="nonzero"></path>
+                    <text id="Popup" font-family="Giorgio" font-size="31.5" font-weight="normal" fill="#000000">
+                        <tspan x="45" y="30">Popup</tspan>
+                    </text>
+                    <text id="3D" font-family="Giorgio" font-size="31.5" font-weight="normal" fill="#1BD6BD">
+                        <tspan x="148" y="31">3D</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

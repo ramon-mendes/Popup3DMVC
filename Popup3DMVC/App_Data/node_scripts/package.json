@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "node-stl": "^0.3.0"
+  }
+}

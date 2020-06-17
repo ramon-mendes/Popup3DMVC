@@ -1,0 +1,406 @@
+﻿<!-- HtmlView:on -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 106</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <style>
+        body {
+            background: rgb(40,40,40);
+        }
+
+        .fill-width {
+            z-index: 1;
+        }		
+
+        .canvas-container > canvas {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+        }
+
+        h1 {
+            z-index: 2;
+            text-align: center;
+            white-space: nowrap;
+            pointer-events: none;
+            font-size: 50px;
+            letter-spacing: 0.7em;
+            padding-left: 0.7em;
+            text-transform: uppercase;
+            font-weight: normal;
+        }
+
+        @media (max-width: 850px) {
+            h1 {
+                font-size: 35px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+	<div id="container" class="fill-width"></div>
+    <h1 class="center">Noisy</h1>
+
+<script src="dist/jquery.js" charset="utf-8"></script>
+<script src="dist/three.js" charset="utf-8"></script>
+<script type="x-shader/x-vertex" id="vertexShaderCenterPiece">
+varying vec2 vUv;
+
+void main() {
+    vUv = uv;
+    vec3 pos = position;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+}
+</script>
+<script type="x-shader/x-fragment" id="fragmentShaderCenterPiece">
+vec3 rgb(float r, float g, float b) {
+    return vec3(r / 255., g / 255., b / 255.);
+}
+
+vec3 rgb(float c) {
+    return vec3(c / 255., c / 255., c / 255.);
+}
+float random (in vec2 st) {
+    return fract(sin(dot(st.xy,vec2(12.9898,78.233))) * 43758.5453123);
+}
+
+// 2D Noise based on Morgan McGuire @morgan3d
+// https://www.shadertoy.com/view/4dS3Wd
+float noise (in vec2 st) {
+    vec2 i = floor(st);
+    vec2 f = fract(st);
+    float a = random(i);
+    float b = random(i + vec2(1.0, 0.0));
+    float c = random(i + vec2(0.0, 1.0));
+    float d = random(i + vec2(1.0, 1.0));
+    vec2 u = f*f*(3.0-2.0*f);
+    return mix(a, b, u.x) +
+            (c - a)* u.y * (1.0 - u.x) +
+            (d - b) * u.x * u.y;
+}
+
+varying vec2 vUv;
+uniform vec3 u_color1;
+uniform vec3 u_color2;
+uniform vec2 u_dimensions;
+
+void main() {
+    vec2 st = gl_FragCoord.xy / u_dimensions;
+    float n = noise(vec2(st * 1184.));
+    vec3 c1 = rgb(u_color1.r, u_color1.g, u_color1.b);
+    vec3 c2 = rgb(u_color2.r, u_color2.g, u_color2.b);
+    vec3 color = mix(c1, c2, vUv.x);
+
+    color = mix(color, vec3(n), vUv.x * 0.2);
+    gl_FragColor = vec4(color, 1.);
+}
+</script>
+<script type="x-shader/x-vertex" id="vertexShader1">
+varying vec2 vUv;
+
+void main() {
+    vUv = uv;
+    vec3 pos = position;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+}
+</script>
+<script type="x-shader/x-fragment" id="fragmentShader1">
+vec3 rgb(float r, float g, float b) {
+    return vec3(r / 255., g / 255., b / 255.);
+}
+
+vec3 rgb(float c) {
+    return vec3(c / 255., c / 255., c / 255.);
+}
+float random (in vec2 st) {
+    return fract(sin(dot(st.xy,vec2(12.9898,78.233))) * 43758.5453123);
+}
+
+// 2D Noise based on Morgan McGuire @morgan3d
+// https://www.shadertoy.com/view/4dS3Wd
+float noise (in vec2 st) {
+    vec2 i = floor(st);
+    vec2 f = fract(st);
+    float a = random(i);
+    float b = random(i + vec2(1.0, 0.0));
+    float c = random(i + vec2(0.0, 1.0));
+    float d = random(i + vec2(1.0, 1.0));
+    vec2 u = f*f*(3.0-2.0*f);
+    return mix(a, b, u.x) +
+            (c - a)* u.y * (1.0 - u.x) +
+            (d - b) * u.x * u.y;
+}
+
+varying vec2 vUv;
+uniform vec3 u_color1;
+uniform vec3 u_color2;
+
+void main() {
+    float n = noise(vec2(vUv * 1493.));
+    vec3 c1 = rgb(u_color1.r, u_color1.g, u_color1.b);
+    vec3 c2 = rgb(u_color2.r, u_color2.g, u_color2.b);
+    vec3 color = mix(c1, c2, vUv.x);
+
+    color = mix(color, vec3(n), vUv.x * 0.2);
+    gl_FragColor = vec4(color, 1.);
+}
+</script>
+
+
+<script>
+jQuery(function($) {
+	'use strict';
+	var $container = $('#container');
+	// prettier-ignore
+	var renderer, scene, camera,
+	geometryCenterPiece, materialCenterPiece, meshCenterPiece,
+	geometry1, material1, mesh1,
+	geometry2, material2, mesh2,
+	geometry3, material3, mesh3,
+	geometry4, material4, mesh4,
+	geometry5, material5, mesh5,
+	geometry6, material6, mesh6,
+	fov = 45;
+
+	var mousePosition = {
+		x: 0.5,
+		y: 0.5,
+	};
+	var v2MousePosition = new THREE.Vector2(mousePosition.x, mousePosition.y);
+
+	var start = Date.now();
+	var fixedTime = 0,
+		timeOffset = 0,
+		dynamicTime = 0;
+
+	var w, h, isMobile;
+
+	var camX = 0;
+	var camY = 0;
+
+	var isFocused = true;
+	$(window).on('blur', function() {
+		isFocused = false;
+	});
+	$(window).on('focus', function() {
+		isFocused = true;
+		render();
+	});
+
+	function updateSize() {
+		w = $container.width();
+		h = $container.height();
+		isMobile = w < 1300;
+	}
+
+	init();
+
+	function init() {
+		updateSize();
+
+		scene = new THREE.Scene();
+
+		camera = new THREE.PerspectiveCamera(fov, w / h, 1, 500);
+		camera.position.z = isMobile ? 250 : 210;
+
+		scene.add(camera);
+
+		var geometryCenterPieceSize = 140;
+		geometryCenterPiece = new THREE.IcosahedronGeometry(
+			geometryCenterPieceSize,
+			5
+		);
+		materialCenterPiece = new THREE.ShaderMaterial({
+			uniforms: {
+				u_color1: {type: 'v3', value: new THREE.Vector3(65, 65, 65)},
+				u_color2: {type: 'v3', value: new THREE.Vector3(20, 20, 20)},
+				u_dimensions: {type: 'v2', value: new THREE.Vector2(w, h)},
+			},
+			fragmentShader: $('#fragmentShaderCenterPiece').text(),
+			vertexShader: $('#vertexShaderCenterPiece').text(),
+			side: THREE.BackSide,
+		});
+		meshCenterPiece = new THREE.Mesh(
+			geometryCenterPiece,
+			materialCenterPiece
+		);
+		meshCenterPiece.position.z = geometryCenterPieceSize / 2;
+		meshCenterPiece.rotation.set(0.0, -0.8, 0.0);
+		scene.add(meshCenterPiece);
+
+		geometry1 = new THREE.BoxGeometry(15, 15, 15);
+		material1 = new THREE.ShaderMaterial({
+			uniforms: {
+				u_color1: {type: 'v3', value: new THREE.Vector3(242, 39, 163)},
+				u_color2: {type: 'v3', value: new THREE.Vector3(30, 30, 30)},
+			},
+			fragmentShader: $('#fragmentShader1').text(),
+			vertexShader: $('#vertexShader1').text(),
+		});
+		mesh1 = new THREE.Mesh(geometry1, material1);
+		mesh1.position.set(isMobile ? 0 : 70, isMobile ? 40 : 0, 2);
+		mesh1.scale.multiplyScalar(1.0);
+		mesh1.rotation.x = -0.8;
+		mesh1.rotation.y = 0.8;
+		mesh1.rotation.z = 0.0;
+		scene.add(mesh1);
+
+		geometry2 = new THREE.BoxGeometry(15, 15, 15);
+		material2 = new THREE.ShaderMaterial({
+			uniforms: {
+				u_color1: {type: 'v3', value: new THREE.Vector3(100, 65, 255)},
+				u_color2: {type: 'v3', value: new THREE.Vector3(35, 35, 35)},
+			},
+			fragmentShader: $('#fragmentShader1').text(),
+			vertexShader: $('#vertexShader1').text(),
+		});
+		mesh2 = new THREE.Mesh(geometry2, material2);
+		mesh2.position.set(isMobile ? -42 : -106, 0, 24);
+		mesh2.scale.multiplyScalar(1.0);
+		mesh2.rotation.x = -0.8;
+		mesh2.rotation.y = 0.8;
+		mesh2.rotation.z = 0.0;
+		scene.add(mesh2);
+
+		geometry3 = new THREE.BoxGeometry(15, 15, 15);
+		material3 = new THREE.ShaderMaterial({
+			uniforms: {
+				u_color1: {type: 'v3', value: new THREE.Vector3(30, 30, 30)},
+				u_color2: {type: 'v3', value: new THREE.Vector3(35, 35, 35)},
+			},
+			fragmentShader: $('#fragmentShader1').text(),
+			vertexShader: $('#vertexShader1').text(),
+		});
+		mesh3 = new THREE.Mesh(geometry3, material3);
+		mesh3.position.set(isMobile ? 40 : 110, 0, 21);
+		mesh3.scale.multiplyScalar(1.0);
+		mesh3.rotation.x = -0.8;
+		mesh3.rotation.y = 0.8;
+		mesh3.rotation.z = 0.0;
+		scene.add(mesh3);
+
+		geometry4 = new THREE.BoxGeometry(15, 15, 15);
+		material4 = new THREE.ShaderMaterial({
+			uniforms: {
+				u_color1: {type: 'v3', value: new THREE.Vector3(255, 46, 233)},
+				u_color2: {type: 'v3', value: new THREE.Vector3(65, 65, 255)},
+			},
+			fragmentShader: $('#fragmentShader1').text(),
+			vertexShader: $('#vertexShader1').text(),
+		});
+		mesh4 = new THREE.Mesh(geometry4, material4);
+		mesh4.position.set(isMobile ? 0 : -68, isMobile ? -40 : 0, 19);
+		mesh4.scale.multiplyScalar(1.0);
+		mesh4.rotation.x = -0.8;
+		mesh4.rotation.y = 0.8;
+		mesh4.rotation.z = 0.0;
+		scene.add(mesh4);
+
+		geometry5 = new THREE.BoxGeometry(15, 15, 15);
+		material5 = new THREE.ShaderMaterial({
+			uniforms: {
+				u_color1: {type: 'v3', value: new THREE.Vector3(30, 30, 30)},
+				u_color2: {type: 'v3', value: new THREE.Vector3(35, 35, 35)},
+			},
+			fragmentShader: $('#fragmentShader1').text(),
+			vertexShader: $('#vertexShader1').text(),
+		});
+		mesh5 = new THREE.Mesh(geometry5, material5);
+		mesh5.position.set(isMobile ? -17 : -30, 0, 16);
+		mesh5.scale.multiplyScalar(1.0);
+		mesh5.rotation.x = -0.8;
+		mesh5.rotation.y = 0.8;
+		mesh5.rotation.z = 0.0;
+		scene.add(mesh5);
+
+		geometry6 = new THREE.BoxGeometry(15, 15, 15);
+		material6 = new THREE.ShaderMaterial({
+			uniforms: {
+				u_color1: {type: 'v3', value: new THREE.Vector3(35, 35, 35)},
+				u_color2: {type: 'v3', value: new THREE.Vector3(55, 55, 55)},
+			},
+			fragmentShader: $('#fragmentShader1').text(),
+			vertexShader: $('#vertexShader1').text(),
+		});
+		mesh6 = new THREE.Mesh(geometry6, material6);
+		mesh6.position.set(isMobile ? 14 : 18, 0, 20);
+		mesh6.scale.multiplyScalar(1.0);
+		mesh6.rotation.x = -0.8;
+		mesh6.rotation.y = 0.8;
+		mesh6.rotation.z = 0.0;
+		scene.add(mesh6);
+
+		renderer = new THREE.WebGLRenderer({antialias: true, alpha: false});
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		renderer.setSize(w, h);
+		renderer.setClearColor(new THREE.Color('rgb(40,40,40)'));
+
+		$container.append(renderer.domElement);
+
+		window.addEventListener('resize', onWindowResize, false);
+
+		render();
+	}
+
+	function onWindowResize() {
+		updateSize();
+		renderer.setSize(w, h);
+		camera.aspect = w / h;
+
+		camera.updateProjectionMatrix();
+	}
+
+	var handleTouchMove = function(e) {
+		var touch = e.touches[0];
+		mousePosition.x = touch.pageX / w;
+		mousePosition.y = touch.pageY / h;
+	};
+
+	var handleMouseMove = function(e) {
+		mousePosition.x = e.pageX / w;
+		mousePosition.y = e.pageY / h;
+	};
+
+	if ('ontouchstart' in window) {
+		$(document.body).on('touchmove', handleTouchMove);
+	} else {
+		$(document.body).on('mousemove', handleMouseMove);
+	}
+
+	function render() {
+		if (isFocused) {
+			camX =
+				((mousePosition.x - 0.5) * (isMobile ? 150 : 80) -
+					camera.position.x) *
+				0.05;
+			camY =
+				((mousePosition.y - 0.5) * (isMobile ? 120 : 50) -
+					camera.position.y) *
+				0.05;
+
+			camera.position.x += camX;
+			camera.position.y += camY;
+			camera.position.z += camY;
+			camera.lookAt(scene.position);
+
+			renderer.render(scene, camera);
+			requestAnimationFrame(render);
+		}
+	}
+});
+</script>
+</body>
+</html>

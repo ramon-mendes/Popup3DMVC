@@ -1,0 +1,32 @@
+﻿@{
+	Layout = "_Layout";
+}
+@section head {
+	<style>
+		@@import url(/bundled/conta.css);
+	</style>
+
+	@RenderSection("head", required: false)
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col col-nav">
+			<div class="profile">
+				<small class="welcome">Bem vindo,</small>
+				<div class="name">@ViewBag.nome</div>
+			</div>
+
+			<nav class="nav-conta">
+				<div class="label">CONTA</div>
+				<a href="/Conta/Compras">Minhas compras</a>
+				<a href="/Conta">Dados pessoais</a>
+				<a href="/Conta">Alterar senha</a>
+			</nav>
+		</div>
+
+		<div class="col col-content">
+			@RenderBody()
+		</div>
+	</div>
+</div>

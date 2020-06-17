@@ -1,0 +1,145 @@
+﻿@import url(../webfonts/Montserrat2.css);
+@import url(../webfonts/giorgio/stylesheet.css);
+html,
+body {
+  height: 100%;
+  font-size: 15px; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.hidden {
+  display: none; }
+
+.spacer {
+  flex-grow: 1; }
+
+.dbg, [dbg] {
+  outline: solid 3px red; }
+
+.grad-orange {
+  background-image: linear-gradient(90deg, #e052a0, #f15c41); }
+
+a:hover {
+  text-decoration: none; }
+
+a.white {
+  color: white; }
+
+a.white:hover {
+  color: #f65d42; }
+
+img {
+  max-width: 100%; }
+
+svg.icon {
+  fill: currentColor;
+  width: 16px;
+  height: 16px; }
+
+svg.icon.big {
+  width: 18px;
+  height: 18px; }
+
+svg.icon.text {
+  vertical-align: middle;
+  margin-top: -4px; }
+
+.form-control {
+  border: 2px solid #e0f2df; }
+
+.form-control:focus {
+  color: #4e5159;
+  background-color: #fff;
+  border-color: #557cf2;
+  box-shadow: none; }
+
+.btn {
+  border-radius: 100px; }
+  .btn svg {
+    vertical-align: middle;
+    margin-bottom: 2px;
+    margin-right: 3px; }
+
+.btn:not(.btn-link):not(.btn-sm) {
+  padding: .5rem 1rem;
+  font-size: 1rem;
+  border-width: 1px;
+  box-shadow: 0 2px 1px rgba(111, 115, 128, 0.3);
+  transition: all .2s ease-out;
+  outline: 0;
+  font-weight: 700; }
+
+.btn-sm {
+  padding: .2rem .7rem; }
+
+.btn-white {
+  border: solid 1px silver; }
+
+.btn-danger {
+  color: #fff;
+  background-color: #f2594e;
+  border-color: #f2594e; }
+  .btn-danger:hover {
+    background-color: #ef2c1e;
+    border-color: #ee2415; }
+
+.btn-default {
+  color: #4a4a4a;
+  background-color: #E5E5E5;
+  border-color: #E5E5E5; }
+  .btn-default:hover {
+    color: #4a4a4a;
+    background-color: #cccbcb;
+    border-color: #c6c6c6; }
+
+.btn-secondary {
+  color: #557cf2;
+  background-color: #f7faff;
+  border-color: #f7faff; }
+  .btn-secondary:hover {
+    color: #557cf2;
+    background-color: #e3edff;
+    border-color: #e3edff; }
+
+.alert {
+  padding: 1.25rem 1.5rem;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: .25rem; }
+  .alert ul {
+    margin: 0 !important; }
+  .alert ul li {
+    margin: 2px 0; }
+
+.alert-danger, .alert-info, .alert-success, .alert-warning {
+  border-left: 5px solid #a2b8fa;
+  border-left-color: #a2b8fa;
+  position: relative; }
+
+.alert-danger {
+  background-color: #fdeceb;
+  border-color: #fdeceb;
+  color: #c24036;
+  border-left-color: #f29c96; }
+
+/* Bootstrap Toggle v2.2.2 corrections for Bootstrap 4*/
+.toggle-off {
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); }
+
+.toggle.off {
+  border-color: rgba(0, 0, 0, 0.25); }
+
+.toggle-handle {
+  background-color: white;
+  border: thin rgba(0, 0, 0, 0.25) solid; }
+
+.toggle-group label {
+  line-height: 20px; }
+

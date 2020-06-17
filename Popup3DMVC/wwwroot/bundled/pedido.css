@@ -1,0 +1,37 @@
+﻿#main {
+  padding: 50px 0; }
+
+.card section {
+  border-top: 1px solid #d5d5d5;
+  padding: 15px 0 18px; }
+  .card section:first-child {
+    border: none; }
+  .card section:last-child {
+    padding-bottom: 0; }
+
+.card h3 {
+  font-size: 24px; }
+
+.card ul {
+  margin: 0;
+  list-style: none;
+  padding: 0; }
+
+.card li {
+  display: flex;
+  justify-content: space-between; }
+  .card li label {
+    opacity: 0.65; }
+  .card li div {
+    text-align: right; }
+  .card li.tempo-total label {
+    opacity: 0.9; }
+  .card li.tempo-total div {
+    font-size: 18px;
+    font-weight: 600; }
+  .card li.total label {
+    opacity: 1; }
+  .card li.total div {
+    font-size: 23px;
+    font-weight: 600; }
+

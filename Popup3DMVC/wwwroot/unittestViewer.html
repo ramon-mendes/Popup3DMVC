@@ -1,0 +1,42 @@
+﻿<!-- OmniView:off -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+
+	<link href="lib/bootstrap-4.1.0/scss/bootstrap.min.css" rel="stylesheet" />
+	<link href="bundled/global.css" rel="stylesheet" />
+	<link href="bundled/site.css" rel="stylesheet" />
+	<link href="bundled/viewer.css" rel="stylesheet" />
+
+	<link href="lib/dat.gui/dat.gui.css" rel="stylesheet" />
+	<script src="lib/dat.gui/dat.gui.js"></script>
+
+	<script src="lib/jquery-3.3.1.min.js"></script>
+	
+
+	<style>
+		.dg input { line-height: initial; }
+	</style>
+</head>
+
+<body>
+	<div id="view-3js" class="stl-preview" h500>
+		<div id="canvas-wrap"></div>
+		<div id="canvas-loading"></div>
+	</div>
+	
+	<script src="lib/three/three.min.js"></script>
+	<script src="lib/three/STLLoader.js"></script>
+	<script src="lib/three/OrbitControls.js"></script>
+	<script src="js/stlviewer.js"></script>
+
+	<script>
+		LoadSTL('stl_featured/Plantygon/v2_plantygon.stl', 0, function() {
+			console.log("HERERE");
+
+			$('#canvas-loading').remove();
+		});
+	</script>
+</body>
+</html>

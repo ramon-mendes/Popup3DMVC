@@ -1,0 +1,39 @@
+﻿<environment exclude="Development">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	<script src="~/bundled/site_global.min.js"></script>
+</environment>
+<environment include="Development">
+	<script src="~/lib/jquery-3.3.1.min.js"></script>
+	<script src="~/lib/popper.min.js"></script>
+	<script src="~/lib/bootstrap-4.1.0/dist/js/bootstrap.js"></script>
+	<script src="~/lib/jquery.bootstrap-growl.min.js"></script>
+	<script src="~/lib/stats.min.js"></script>
+
+	<script src="~/js/site.js"></script>
+
+	<script>
+		var stats;
+		if(false) {
+			stats = new Stats();
+			stats.showPanel(0);
+			document.body.appendChild(stats.dom);
+		}
+	</script>
+</environment>
+
+<script>
+	@if(TempData["msg-alert"]!=null)
+	{
+		<text>
+			$.bootstrapGrowl('@TempData["msg-alert"]', { width: 'auto', align: 'center', allow_dismiss: false });
+		</text>
+	}
+	@if(TempData["msg-error"]!=null)
+	{
+		<text>
+			$.bootstrapGrowl('@TempData["msg-error"]', { width: 'auto', align: 'center', allow_dismiss: false, type: 'danger' });
+		</text>
+	}
+</script>

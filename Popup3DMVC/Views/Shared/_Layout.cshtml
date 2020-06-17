@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="" />
+	<title>Startup Weekend &#8211; Porto Alegre &#8211; Site Oficial da Comunidade Organizadora</title>
+
+	<link rel="icon" href="~/img/favicon.png">
+	<link rel="apple-touch-icon-precomposed" href="~/img/favicon2.png">
+
+	<environment include="Development">
+	</environment>
+	<environment exclude="Development">
+	</environment>
+
+	<link href="~/lib/bootstrap-4.1.0/scss/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+	<link href="~/bundled/global.css" rel="stylesheet" asp-append-version="true" />
+	<link href="~/bundled/site.css" rel="stylesheet" asp-append-version="true" />
+
+	@Html.Raw(ViewBag.svgsprite)
+	@RenderSection("head", required: false)
+</head>
+
+<body>
+	<div id="cta-featured">
+		<button class="float-right btn">×</button>
+		<h4>👋 Hey, down here!</h4>
+		<p>We're featured on Product Hunt today!<br />Check us out on the <a href="https://www.producthunt.com" class="a-checkus" target="_blank" rel="noopener">home page</a>. 👌</p>
+		<a href="https://www.producthunt.com" class="btn btn-block btn-info text-center" title="Visit Product Hunt" target="_blank" rel="noopener">Visit Product Hunt →</a>
+	</div>
+
+	<div class="overlay-dnd">
+		<div class="wraper">
+			<svg class="icon icon-dnd"><use xlink:href="#dnd"></use></svg>
+			<div>Solte aqui seu arquivo .stl para fazer o upload..</div>
+		</div>
+	</div>
+
+	<div class="overlay-upload">
+		<p>Fazendo o upload do arquivo, por favor aguarde...</p>
+		<p id="prog"></p>
+		<img src="~/img/apng/loader.png" />
+	</div>
+
+	<nav id="nav-main">
+		<div class="container">
+			<div class="wraper">
+				<a href="/"><img src="~/img/logo.png" /></a>
+
+				<div class="spacer"></div>
+
+				<div class="dropdown">
+					<a href="" tabindex="0" class="pop">Explorar</a>
+
+					<div class="hidden">
+						@*NO IDs here because this HTML is cloned*@
+						<div class="menu-explorar" tabindex="0">
+							<a href="#" class="galeria"><svg class="icon icon-arrow-menu"><use xlink:href="#arrow-menu"></use></svg> Galeria</a>
+							<a href="#" class="projetos"><svg class="icon icon-arrow-menu"><use xlink:href="#arrow-menu"></use></svg> Projetos</a>
+							<a href="#" class="especialistas"><svg class="icon icon-arrow-menu"><use xlink:href="#arrow-menu"></use></svg> Especialistas</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="dropdown">
+					<a href="" tabindex="0">Upload</a>
+				</div>
+
+				<div class="dropdown" style="margin-bottom: -5px">
+					<a href="" tabindex="0" class="pop" id="pop-account"><svg class="icon icon-account"><use xlink:href="#account"></use></svg></a>
+
+					<div class="hidden">
+						@*NO IDs here because this HTML is cloned*@
+						<div class="menu-account" tabindex="0">
+							@if(ViewBag.auth_logged)
+							{
+								<div>
+									<h4>Olá @ViewBag.auth_name!</h4>
+									<a href="/Conta" class="big-link">Conta</a>
+									<a href="/Conta/Compras" class="big-link mb-2">Minhas compras</a>
+									<a href="/Usuario/Logout" class="btn btn-outline-secondary btn-block">Logout</a>
+								</div>
+							}
+							else
+							{
+								<form method="post" action="/Usuario/Login" class="login-form">
+									<fieldset>
+										<input type="text" name="email" placeholder="E-mail" class="form-control mb-2" />
+										<input type="password" name="pwd" placeholder="Senha" class="form-control" />
+										<div class="mb-2"><a href="/Usuario/EsqueciMinhaSenha">Esqueceu a senha?</a></div>
+										<div class="alert alert-danger hidden">E-mail ou senha inválido.</div>
+										<button type="submit" class="btn btn-primary btn-block mb-2">Entrar</button>
+									</fieldset>
+								</form>
+
+								<div class="mb-1 mt-3">Não possui cadastro?</div>
+								<a href="/Usuario/Cadastrar" class="btn btn-outline-secondary btn-block">Cadastre-se</a>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<div id="main">
+		@RenderBody()
+	</div>
+
+	<div class="spacer"></div>
+
+	<footer>
+		<div class="container">
+			<div class="footer-links">
+				<a href="/"><img src="~/img/logoB.png" /></a>
+				<a href="">Sobre</a>
+				<a href="">Termos de Uso</a>
+				<a href="">Contato</a>
+
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="width: 0; height: 0; position: absolute; left: 0; top: 0;">
+					<defs>
+						<linearGradient id="MyGradient" gradientTransform="rotate(90)">
+							<stop offset="0%" stop-color="#f15c41" />
+							<stop offset="100%" stop-color="#e052a0" />
+						</linearGradient>
+					</defs>
+				</svg>
+
+				<div class="d-flex ml-5">
+					<a href=""><svg class="icon icon-facebook-box" style="fill: url(#MyGradient);"><use xlink:href="#facebook-box"></use></svg></a>
+					<a href=""><svg class="icon icon-instagram" style="fill: url(#MyGradient);"><use xlink:href="#instagram"></use></svg></a>
+				</div>
+			</div>
+
+			<div class="footer-news">
+				<a href="/Novidades" class="h4 white">Novidades <svg class="icon icon-link-external"><use xlink:href="#link-external"></use></svg></a><br />
+				<span class="small">O que acontece no nosso portal!</span>
+				<div class="new-one">
+					<a href="" class="white">Impressão 3D: a revolução só está começando</a>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+	@Html.Partial("_Scripts")
+	@RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<PrinterUIModel>
+
+@foreach(var item in Model)
+{
+	<div class="printer" data-id="@item.material.Id">
+		<div class="material">
+			<div>@item.material.nome</div>
+		</div>
+		<div class="resolucao">
+			<div>@item.material.qualidade<small> resolução</small></div>
+		</div>
+		<div class="cores">
+			<select class="form-control" asp-items="@(new SelectList(item.material.cores))"></select>
+		</div>
+		
+		<div class="valor">
+			<div><small>R$</small> @item.valor_peca<small class="frete">+ frete</small></div>
+		</div>
+		
+		<div class="tempo">
+			<div>@item.prazo_dias <small>dias úteis</small></div>
+		</div>
+		
+		<div class="info">
+			<div class="loja-nome">@item.empresa.nome</div>
+			<div class="loja-local">@item.empresa.end.cidade / @item.empresa.end.UF</div>
+			<div class="loja-avaliacao"></div>
+			<a href="" class="btn btn-secondary btn-sm">Ver loja</a>
+		</div>
+
+		<div class="imprimir">
+			<a href="#" class="btn-imprimir grad-orange">Imprimir</a>
+		</div>
+	</div>
+}

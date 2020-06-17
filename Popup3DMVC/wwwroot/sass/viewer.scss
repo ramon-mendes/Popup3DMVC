@@ -1,0 +1,34 @@
+﻿#view-3js
+{
+	position: relative;
+	flex-grow: 1;
+	height: 100%;
+	&[h500] { height: 500px; }
+
+	& > *
+	{
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+	}
+	
+	#canvas-wrap
+	{
+		display: block;
+		overflow: hidden;
+		//background: url(/img/grain_stardust.png);
+		--viewerbg: #161616;
+	}
+
+	#canvas-warpfield
+	{
+		pointer-events: none;
+	}
+
+	#canvas-loading
+	{
+		background: url(../img/loaders/stl_loader.png) center no-repeat;
+	}
+}

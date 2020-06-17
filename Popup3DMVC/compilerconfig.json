@@ -1,0 +1,46 @@
+﻿[
+	{
+		"outputFile": "wwwroot/bundled/site.css",
+		"inputFile": "wwwroot/sass/site.scss"
+	},
+	{
+		"outputFile": "wwwroot/bundled/global.css",
+		"inputFile": "wwwroot/sass/global.scss"
+	},
+	{
+		"outputFile": "wwwroot/bundled/viewer.css",
+		"inputFile": "wwwroot/sass/viewer.scss"
+	},
+	{
+		"outputFile": "wwwroot/bundled/pedido.css",
+		"inputFile": "wwwroot/sass/pedido.scss"
+	},
+	{
+		"outputFile": "wwwroot/bundled/conta.css",
+		"inputFile": "wwwroot/sass/conta.scss"
+	},
+	{
+		"outputFile": "wwwroot/bundled/page_details.css",
+		"inputFile": "wwwroot/sass/page_details.scss"
+	},
+	{
+		"outputFile": "wwwroot/bundled/page_checkout.css",
+		"inputFile": "wwwroot/sass/page_checkout.scss"
+	},
+	{
+		"outputFile": "wwwroot/bundled/floating-labels.css",
+		"inputFile": "wwwroot/sass/floating-labels.scss"
+	},
+	{
+		"outputFile": "wwwroot/bundled/page_home.css",
+		"inputFile": "wwwroot/sass/page_home.scss"
+	},
+	{
+		"outputFile": "wwwroot/lib/bootstrap-4.1.0/scss/bootstrap.css",
+		"inputFile": "wwwroot/lib/bootstrap-4.1.0/scss/bootstrap.scss"
+	},
+	{
+		"outputFile": "wwwroot/lib/bootstrap-4.1.0/scss/bootstrap-grid.css",
+		"inputFile": "wwwroot/lib/bootstrap-4.1.0/scss/bootstrap-grid.scss"
+	}
+]

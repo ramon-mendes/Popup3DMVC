@@ -1,0 +1,144 @@
+﻿@model UploadModel
+@{
+	ViewData["Title"] = "Impressão";
+}
+@section head {
+	<link href="~/bundled/viewer.css" rel="stylesheet" />
+	<link href="~/bundled/page_details.css" rel="stylesheet" />
+}
+@section scripts {
+	<script src="~/lib/jquery.mask.min.js"></script>
+	<script src="~/bundled/viewer.min.js"></script>
+
+	<script>
+		LoadSTL('@(Model.subpath)', function() {
+			$('#canvas-loading').remove();
+		});
+
+		function OnStlLoaded(info) {
+			var measure = function(n) { return (n / 10).toFixed(1); };// mm to cm
+			var volume = function(n) { return (n).toFixed(1) + ' cm³'; };
+			$('#info-medidas').text(measure(info.x) + ' x ' + measure(info.y) + ' x ' + measure(info.z) + ' cm');
+			$('#info-volume').text(volume(info.volume));
+		}
+
+		OnStlLoaded({
+			volume: @(Model.volume),
+			x: @(Model.x),
+			y: @(Model.y),
+			z: @(Model.z)
+		});
+
+		$('#ui-cep').mask('00000-000');
+
+		$('#btn-enviar-cep').click(function() {
+			$('#field-cep').attr('disabled', true);
+			$('#zip-loading').show();
+			$('#ajax-error').hide();
+			$('#step2').hide();
+
+			function Error(msg) {
+				$('#ajax-error').show();
+				$('#ajax-error').text(msg);
+			}
+
+			$.getJSON('/Imprimir/AjaxList', { cep: $('#ui-cep').val(), id_upload: '@(Model.Id)' }, function(data) {
+				if(data.ok) {
+					$('#printer-list').html(data.html);
+					$('#step2').show();
+				} else {
+					Error(data.err);
+				}
+			}).fail(function() {
+				Error('Erro interno');
+			}).always(() => {
+				$('#field-cep').removeAttr('disabled');
+				$('#zip-loading').hide();
+			});
+		});
+	</script>
+
+	<script>
+		$('body').on('click', '.imprimir', function(e) {
+			e.preventDefault();
+
+			var el_printer = $(this).closest('.printer');
+			var params = {
+				id_upload: '@(Model.Id)',
+				id_material: el_printer.data('id'),
+				cor: $('select', el_printer).val()
+			};
+			//console.log(params);
+
+			$.getJSON('/Imprimir/AjaxSelectItem', params, function(data) {
+				location = '/Imprimir/Checkout';
+			});
+		});
+	</script>
+
+	@if(ViewBag.cep != null)
+	{
+	<script>
+		$('#ui-cep').val('@ViewBag.cep');
+		$('#btn-enviar-cep').click();
+	</script>
+	}
+}
+
+<div id="view-3js">
+	<div id="canvas-wrap"></div>
+	<div id="canvas-loading"></div>
+
+	<div id="info">
+		<div class="box">
+			Arquivo:
+			<h4>@Model.filename</h4>
+			Medidas:
+			<h4 id="info-medidas">-</h4>
+			Volume:
+			<h4 id="info-volume">-</h4>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<h3>01.</h3>
+	<p>Informe seu CEP para encontramos o fornecedor mais próximo:</p>
+	<fieldset class="form-inline" id="field-cep">
+		<input type="text" id="ui-cep" autocomplete="off" class="form-control" />
+		<button class="btn btn-dark ml-2" id="btn-enviar-cep">ENVIAR</button>
+		<div id="zip-loading" class="ml-2">
+			<img src="~/img/loaders/hourglass.svg" width="36" />
+		</div>
+		<div class="alert alert-danger hidden mb-0 ml-2" id="ajax-error" style="padding: .75rem 1.25rem;"></div>
+	</fieldset>
+
+	<div id="step2">
+		<h3>02.</h3>
+		<div class="d-flex justify-content-center align-items-center mb-2">
+			<span>Escolha sua impressão ideal:</span>
+
+			<div class="order-by">
+				<label>Ordenar por: </label>
+				<select class="form-control">
+					<option value="proximidade">Proximidade</option>
+					<option value="preco">Menor preço</option>
+					<option value="tempo">Menor tempo</option>
+					<option value="resolucao">Maior resolução</option>
+					<option value="rating">Melhor avaliação</option>
+				</select>
+			</div>
+		</div>
+
+		<div id="thead">
+			<div>Material / Qualidade</div>
+			<div>Cor</div>
+			<div>Preço</div>
+			<div>Prazo de entrega</div>
+			<div>Fornecedor</div>
+			<div></div>
+		</div>
+
+		<div id="printer-list"></div>
+	</div>
+</div>

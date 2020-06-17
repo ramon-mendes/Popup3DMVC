@@ -1,0 +1,75 @@
+﻿@model PedidoModel
+@{
+	ViewData["Title"] = "Pagamento por Boleto";
+}
+@section head {
+	<link href="~/bundled/pedido.css" rel="stylesheet" />
+
+	<style>
+		#main p.big { font-size: 17px; }
+	</style>
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-6">
+			<h2>Pedido <span class="text-black-50">@Model.Id</span></h2>
+			<h4><span class="badge badge-info"><small>Status:</small>  @Model.status.StatusString()</span></h4>
+
+			<p class="mt-4 big">
+				Seu pedido foi recebido com sucesso!<br />
+				O próximo passo é você efetuar o pagamento por boleto:<br />
+			</p>
+
+			<p class="my-4">
+				<a href="" class="btn btn-primary">Gerar Boleto</a><br />
+			</p>
+
+			<hr />
+
+			<div class="alert alert-info">
+				<p class="big">
+				Após o pagamento do boleto, demora no máximo <b>3 dias úteis</b>
+				para processarmos e identificar o pagamento
+			</p>
+
+			<p class="big">
+				Você será notificado por e-mail quando o pagamento for identificado.
+			</p>
+
+			<p class="big">
+				Volte sempre a esta página para saber o status do pedido.
+			</p>
+			</div>
+			
+		</div>
+
+		<div class="col-4 offset-2">
+			<div class="card text-white bg-info mb-5" id="card-entrega">
+				<div class="card-header">Dados do pedido</div>
+				<div class="card-body">
+					<h5 class="card-title">Contato</h5>
+					<section>
+						<ul>
+							<li>
+								<label>Nome</label>
+								<div>@Model.Checkout.Nome</div>
+							</li>
+							<li>
+								<label>E-mail</label>
+								<div>@Model.Checkout.Email</div>
+							</li>
+						</ul>
+					</section>
+
+					<h5 class="card-title">Endereço de entrega</h5>
+					<section>
+						@Model.Checkout.ToAddrHtml()
+					</section>
+				</div>
+			</div>
+
+			@Html.Partial("../Imprimir/_CardImpressao", Model)
+		</div>
+	</div>
+</div>

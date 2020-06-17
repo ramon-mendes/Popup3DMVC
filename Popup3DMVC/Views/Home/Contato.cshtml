@@ -1,0 +1,53 @@
+﻿@{
+	ViewData["Title"] = "Contato";
+}
+@section head {
+	<style>
+	</style>
+}
+
+<section id="contato" class="page-simple">
+	<h1>
+		Olá!
+	</h1>
+
+	<div class="facebook">
+		<h2>Facebook</h2>
+		<div class="text">
+			<p>
+				Tire sua dúvidas por mensagem no facebook.<br>
+				Nós responderemos o quanto antes.
+			</p>
+		</div>
+		<p>
+			<a href="https://facebook.com/popup3Dprint" target="_blank" class="btn btn-success">
+				<svg class="icon icon-facebook-circled"><use xlink:href="#facebook-circled"></use></svg> Mensagem no Facebook
+			</a>
+		</p>
+	</div>
+	
+	<div class="old-style">
+		<h2>Old Style</h2>
+		<p>Se preferir envie uma mensagem pelo formulário abaixo.</p>
+		<form action="" method="post" ajax="" novalidate="">
+			<div class="row">
+				<label>Nome</label>
+				<input name="name" value="" type="text">
+			</div>
+			<div class="row">
+				<label>E-mail</label>
+				<input name="email" value="" type="email">
+			</div>
+			<div class="row" style="width: auto; position: relative;">
+				<label>Mensagem</label>
+				<textarea></textarea>
+			</div>
+			<div class="row">
+				<input value="Enviar" class="primary-button green" type="submit">
+			</div>
+			<div class="row">
+				<feedback-ajax></feedback-ajax>
+			</div>
+		</form>
+	</div>
+</section>

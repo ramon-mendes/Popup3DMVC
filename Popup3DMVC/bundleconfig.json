@@ -1,0 +1,26 @@
+﻿[
+	{
+		"inputFiles": [
+			"wwwroot/lib/three/three.min.js",
+			"wwwroot/lib/three/*.js",
+			"wwwroot/js/stlviewer.js",
+			"wwwroot/js/warpfield.js"
+		],
+		"outputFileName": "wwwroot/bundled/viewer.js",
+		"minify": {
+			"enabled": true,
+			"renameLocals": true
+		}
+	},
+	{
+		"inputFiles": [
+			"wwwroot/js/site.js",
+			"wwwroot/lib/jquery.bootstrap-growl.min.js"
+		],
+		"outputFileName": "wwwroot/bundled/site_global.js",
+		"minify": {
+			"enabled": true,
+			"renameLocals": true
+		}
+	}
+]
